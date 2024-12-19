@@ -38,7 +38,7 @@ php artisan make:seeder PostTableSeeder
 
 php artisan db:seed --class=PostTableSeeder
 
-==========================
+=============================
 
 vue.js 
 
