@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
 
 class PostController extends Controller
 {
@@ -24,7 +26,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:posts',
             'content' => 'required',
         ]);
 
@@ -57,10 +59,22 @@ class PostController extends Controller
     {
         $this->authorize('update');
 
+        // $validated = $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     Rule::unique('posts')->ignore($post->id),
+        //     'content' => 'required',
+        // ]);
+
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('posts')->ignore($post->id),
+            ],
             'content' => 'required',
         ]);
+        
         // DD($validated);
         $post->update($validated);
 
